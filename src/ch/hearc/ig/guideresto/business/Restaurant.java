@@ -1,5 +1,7 @@
 package ch.hearc.ig.guideresto.business;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,5 +96,9 @@ public class Restaurant {
 
     public void setType(RestaurantType type) {
         this.type = type;
+    }
+
+    public boolean hasEvaluations() {
+        return CollectionUtils.isNotEmpty(evaluations);
     }
 }
