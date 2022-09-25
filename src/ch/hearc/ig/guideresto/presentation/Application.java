@@ -129,7 +129,7 @@ public class Application {
         Set<Restaurant> filteredList = new LinkedHashSet();
 
         for (Restaurant currentRestaurant : fullList) { // On parcourt la liste complète et on ajoute les restaurants correspondants à la liste filtrée.
-            if (currentRestaurant.getName().toUpperCase().indexOf(research.toUpperCase()) >= 0) { // On met tout en majuscules pour ne pas tenir compte de la casse
+            if (currentRestaurant.getName().toUpperCase().contains(research.toUpperCase())) { // On met tout en majuscules pour ne pas tenir compte de la casse
                 filteredList.add(currentRestaurant);
             }
         }
@@ -154,7 +154,7 @@ public class Application {
         Set<Restaurant> filteredList = new LinkedHashSet();
 
         for (Restaurant currentRestaurant : fullList) { // On parcourt la liste complète et on ajoute les restaurants correspondants à la liste filtrée.
-            if (currentRestaurant.getAddress().getCity().getCityName().toUpperCase().indexOf(research.toUpperCase()) >= 0) { // On met tout en majuscules pour ne pas tenir compte de la casse
+            if (currentRestaurant.getAddress().getCity().getCityName().toUpperCase().contains(research.toUpperCase())) { // On met tout en majuscules pour ne pas tenir compte de la casse
                 filteredList.add(currentRestaurant);
             }
         }
@@ -330,19 +330,18 @@ public class Application {
      * @return Un String qui contient le détail complet d'une CompleteEvaluation, ou null s'il s'agit d'une BasicEvaluation
      */
     private static String getCompleteEvaluationDescription(Evaluation eval) {
-        String result = null;
+        StringBuilder result = new StringBuilder();
 
         if (eval instanceof CompleteEvaluation) {
             CompleteEvaluation ce = (CompleteEvaluation) eval;
-            result = "";
-            result += "Evaluation de : " + ce.getUsername() + "\n";
-            result += "Commentaire : " + ce.getComment() + "\n";
+            result.append("Evaluation de : ").append(ce.getUsername()).append("\n");
+            result.append("Commentaire : ").append(ce.getComment()).append("\n");
             for (Grade currentGrade : ce.getGrades()) {
-                result += currentGrade.getCriteria().getName() + " : " + currentGrade.getGrade() + "/5" + "\n";
+                result.append(currentGrade.getCriteria().getName()).append(" : ").append(currentGrade.getGrade()).append("/5").append("\n");
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
