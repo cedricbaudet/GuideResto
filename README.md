@@ -1,2 +1,2 @@
 # GuideResto
-A class for Business IT students @hegarc // HES-SO
+A project for Business IT students @hegarc // HES-SO
