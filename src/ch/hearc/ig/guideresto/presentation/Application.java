@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.ig.guideresto.presentation;
 
 import ch.hearc.ig.guideresto.business.*;
@@ -12,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ch.hearc.ig.userconsole.utils.Console;
 
 /**
  * @author cedric.baudet
@@ -36,6 +33,12 @@ public class Application {
      * Affichage du menu principal de l'application
      */
     private static void printMainMenu() {
+        Console console = new Console();
+        console.setEntry("*************");
+        console.setEntry("New entry a");
+        console.setEntry("New entry b");
+        console.printMenu();
+
         System.out.println("======================================================");
         System.out.println("Que voulez-vous faire ?");
         System.out.println("1. Afficher la liste de tous les restaurants");
