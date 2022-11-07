@@ -17,6 +17,15 @@ public class Application {
 
     private static Scanner scanner;
 
+    private static String name;
+    private static String description;
+    private static String website;
+
+    private static String street;
+    private static City city = null;
+
+    private static RestaurantType restaurantType = null;
+
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
 
@@ -34,6 +43,9 @@ public class Application {
      */
     private static void printMainMenu() {
         Console console = new Console();
+        Console console2 = new Console();
+        console = new Console();
+
         console.setEntry("*************");
         console.setEntry("New entry a");
         console.setEntry("New entry b");
@@ -45,7 +57,8 @@ public class Application {
         System.out.println("2. Rechercher un restaurant par son nom");
         System.out.println("3. Rechercher un restaurant par ville");
         System.out.println("4. Rechercher un restaurant par son type de cuisine");
-        System.out.println("5. Saisir un nouveau restaurant");
+        System.out.println("5. Saisir un nouveau restaurant sans évaluation");
+        System.out.println("6. Saisir un nouveau restaurant avec une évaluation");
         System.out.println("0. Quitter l'application");
     }
 
@@ -69,7 +82,10 @@ public class Application {
                 searchRestaurantByType();
                 break;
             case 5:
-                addNewRestaurant();
+                addSimpleNewRestaurant();
+                break;
+            case 6:
+                addRestaurantWithEvaluation();
                 break;
             case 0:
                 System.out.println("Au revoir !");
@@ -241,34 +257,66 @@ public class Application {
         }
     }
 
-    /**
-     * Le programme demande les informations nécessaires à l'utilisateur puis crée un nouveau restaurant dans le système.
-     */
-    private static void addNewRestaurant() {
+    private static void addRestaurant() {
         System.out.println("Vous allez ajouter un nouveau restaurant !");
         System.out.println("Quel est son nom ?");
-        String name = readString();
+        name = readString();
         System.out.println("Veuillez entrer une courte description : ");
-        String description = readString();
+        description = readString();
         System.out.println("Veuillez entrer l'adresse de son site internet : ");
-        String website = readString();
+        website = readString();
         System.out.println("Rue : ");
-        String street = readString();
-        City city = null;
+        street = readString();
         do
         { // La sélection d'une ville est obligatoire, donc l'opération se répètera tant qu'aucune ville n'est sélectionnée.
             city = pickCity(FakeItems.getCities());
         } while (city == null);
-        RestaurantType restaurantType = null;
+
         do
         { // La sélection d'un type est obligatoire, donc l'opération se répètera tant qu'aucun type n'est sélectionné.
             restaurantType = pickRestaurantType(FakeItems.getRestaurantTypes());
         } while (restaurantType == null);
+    }
 
-        Restaurant restaurant = new Restaurant(1, name, description, website, street, city, restaurantType);
-        city.getRestaurants().add(restaurant);
-        restaurantType.getRestaurants().add(restaurant);
-        FakeItems.getAllRestaurants().add(restaurant);
+    /**
+     * Le programme demande les informations nécessaires à l'utilisateur puis crée un nouveau restaurant dans le système.
+     */
+    private static void addSimpleNewRestaurant() {
+        addRestaurant();
+        RestaurantBuilder builder = new SimpleRestaurantBuilder();
+        Director director = new Director(builder);
+        director.make(1, name, description, website, street, city, restaurantType);
+        Restaurant restaurant = builder.getRestaurant();
+
+        showRestaurant(restaurant);
+    }
+
+    /**
+     * Le programme demande les informations nécessaires à l'utilisateur puis crée un nouveau restaurant avec une évaluation dans le système.
+     */
+    private static void addRestaurantWithEvaluation() {
+        addRestaurant();
+        RestaurantBuilder builder = new RestaurantWithEvaluationsBuilder();
+        Director director = new Director(builder);
+        System.out.println("Evluation simple obligatoire, faire un choix SVP :");
+        System.out.println("1. J'aime ce restaurant !");
+        System.out.println("2. Je n'aime pas ce restaurant !");
+        int choice = readInt();
+        Boolean like;
+        switch (choice) {
+            case 1:
+                like = true;
+                break;
+            case 2:
+                like = false;
+                break;
+            default:
+                like = true;
+                break;
+        }
+
+        director.make(1, name, description, website, street, city, restaurantType, like);
+        Restaurant restaurant = builder.getRestaurant();
 
         showRestaurant(restaurant);
     }
@@ -303,7 +351,11 @@ public class Application {
 
         int choice;
         do { // Tant que l'utilisateur n'entre pas 0 ou 6, on lui propose à nouveau les actions
-            showRestaurantMenu();
+            if (restaurant.getEvaluations().isEmpty()) {
+                showRestaurantMenu();
+            } else {
+                showRestaurantMenuAfterWithEvalCreation();
+            }
             choice = readInt();
             proceedRestaurantMenu(choice, restaurant);
         } while (choice != 0 && choice != 6); // 6 car le restaurant est alors supprimé...
@@ -356,6 +408,15 @@ public class Application {
         System.out.println("1. J'aime ce restaurant !");
         System.out.println("2. Je n'aime pas ce restaurant !");
         System.out.println("3. Faire une évaluation complète de ce restaurant !");
+        System.out.println("4. Editer ce restaurant");
+        System.out.println("5. Editer l'adresse du restaurant");
+        System.out.println("6. Supprimer ce restaurant");
+        System.out.println("0. Revenir au menu principal");
+    }
+
+    private static void showRestaurantMenuAfterWithEvalCreation() {
+        System.out.println("======================================================");
+        System.out.println("Que souhaitez-vous faire ?");
         System.out.println("4. Editer ce restaurant");
         System.out.println("5. Editer l'adresse du restaurant");
         System.out.println("6. Supprimer ce restaurant");
