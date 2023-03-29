@@ -2,7 +2,7 @@ package ch.hearc.ig.guideresto.business;
 
 /**
  * @author cedric.baudet
- * Interface to build a restaurant
+ * Interface to build a restaurant !
  */
 public interface RestaurantBuilder {
 
