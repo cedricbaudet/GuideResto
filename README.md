@@ -1,3 +1,4 @@
 # GuideResto
+
 A project for Business IT students @hegarc // HES-SO
-Autumn 2023 version
+spring 2024 version
