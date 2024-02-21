@@ -1,7 +1,7 @@
 package ch.hearc.ig.guideresto.presentation;
 
 import ch.hearc.ig.guideresto.business.*;
-import ch.hearc.ig.guideresto.persistence.mock.FakeItems;
+import ch.hearc.ig.guideresto.persistence.FakeItems;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
